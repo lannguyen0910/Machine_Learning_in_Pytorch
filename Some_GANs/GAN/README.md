@@ -4,3 +4,6 @@ Tips: GAN is very tough and hard to converge, you have to modify the hyperparame
 - Better Normalization (BatchNorm)
 - Learning rate with decay, schedule for optimizer
 - Longer train - more epochs
+
+## Result
+![Alt Text](result/first_result.PNG)
