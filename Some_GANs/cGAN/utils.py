@@ -6,7 +6,7 @@ def gradient_penalty(critic, labels, real, fake, device="cpu"):
     alpha = torch.rand((BATCH_SIZE, 1, 1, 1)).repeat(1, C, H, W).to(device)
     interpolated_images = real * alpha + fake * (1 - alpha)
 
-    # Calculate critic scores (in forward propagation)
+    # Calculate critic scores (discriminator scores in forward propagation)
     mixed_scores = critic(interpolated_images, labels)
 
     # Take the gradient of the scores with respect to the images

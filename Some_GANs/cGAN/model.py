@@ -32,8 +32,8 @@ class Discriminator(nn.Module):
         )
 
     def forward(self, x, labels):
-        embedding = self.embed(labels).view(x.reshape(
-            labels.shape[0], 1, self.img_size, self.img_size))  # additional channel
+        embedding = self.embed(labels).view(
+            labels.shape[0], 1, self.img_size, self.img_size)  # additional channel
         # N x C x img_size(H) x img_size(W)
         x = torch.cat([x, embedding], dim=1)
         return self.discriminator(x)
@@ -76,3 +76,10 @@ class Generator(nn.Module):
         # N x C x img_size(H) x img_size(W)
         x = torch.cat([x, embedding], dim=1)
         return self.generator(x)
+
+
+def initialize_weights(model):
+    # Initializes weights according to the DCGAN paper
+    for m in model.modules():
+        if isinstance(m, (nn.Conv2d, nn.ConvTranspose2d, nn.BatchNorm2d)):
+            nn.init.normal_(m.weight.data, 0.0, 0.02)
