@@ -7,3 +7,6 @@ Tips: GAN is very tough and hard to converge, you have to modify the hyperparame
 
 ## Result
 ![Alt Text](result/first_result.PNG)
+
+## Source
+- GAN paper
