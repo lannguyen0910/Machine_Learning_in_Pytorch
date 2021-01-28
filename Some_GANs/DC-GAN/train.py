@@ -70,14 +70,16 @@ for epoch in tqdm(range(NUM_EPOCHS)):
         loss_disc_fake = criterion(disc_fake, torch.zeros_like(disc_fake))
         loss_disc = (loss_disc_real + loss_disc_fake) / 2
 
-        discriminator.zero_grad()
+        for param in discriminator.parameters():  # discriminator.zero_grad()
+            param.grad = None
         loss_disc.backward()
         optimizer_d.step()
 
         # Train Generator: min log(1 - D(G(z))) <-> max log(D(G(z))
         output = discriminator(fake).reshape(-1)
         loss_gen = criterion(output, torch.ones_like(output))
-        generator.zero_grad()
+        for param in generator.parameters():  # generator.zero_grad()
+            param.grad = None
         loss_gen.backward()
         optimizer_g.step()
 
