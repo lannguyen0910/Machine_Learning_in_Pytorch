@@ -1,10 +1,5 @@
 import torch
-import torch.nn as nn
 import torch.utils.data as data
-from torch.autograd import Variable
-import torchvision
-import matplotlib.pyplot as plt
-import matplotlib.patches as pt
 import numpy as np
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -14,6 +9,7 @@ MIN_OBJECT_SIZE = 1
 MAX_OBJECT_SIZE = 4
 TRAIN_SAMPLES = 10000
 VAL_SAMPLES = 500
+TEST_SAMPLES = 10
 BATCH_SIZE = 500
 
 
@@ -36,19 +32,16 @@ def DataGenerator(NUM_IMGS, train=False):
 
 trainset, train_bboxes = DataGenerator(TRAIN_SAMPLES, True)
 valset, val_bboxes = DataGenerator(VAL_SAMPLES, True)
+testset, testbboxes = DataGenerator(TEST_SAMPLES, True)
 
+trainset_tensor = torch.Tensor(trainset).view(-1, IMG_SIZE*IMG_SIZE)
+valset_tensor = torch.Tensor(valset).view(-1, IMG_SIZE*IMG_SIZE)
+testset_tensor = torch.Tensor(testset).view(-1, IMG_SIZE*IMG_SIZE)
 
-def plot_data(dataset, bboxes, figsize):
-    a = np.random.randint(200)
-    fig = plt.figure(figsize=figsize)
-    for id, data in enumerate(dataset[a:a + 12]):
-        fig.add_subplot(3, 4, id + 1)
-        bbox = bboxes[a + id]
-        plt.imshow(data, cmap="binary", interpolation='none',
-                   origin='lower', extent=[0, IMG_SIZE, 0, IMG_SIZE])
-        plt.gca().add_patch(pt.Rectangle((bbox[0], bbox[1]), bbox[2], bbox[3],
-                                         ec="r", fc="none", lw=5))
-    plt.show()
+train_bboxes = torch.Tensor(train_bboxes).view(-1, 4)
 
-
-plot_data(trainset, train_bboxes, (20, 15))
+trainset_tensor = data.TensorDataset(trainset_tensor, train_bboxes)
+trainloader = data.DataLoader(
+    trainset_tensor, batch_size=BATCH_SIZE, shuffle=True, num_workers=4, pin_memory=True)
+valloader = data.DataLoader(
+    valset_tensor, batch_size=BATCH_SIZE, num_workers=4, pin_memory=True)
