@@ -18,9 +18,9 @@ torch.backends.cudnn.benchmark = True
 # Hyperparameters
 LEARNING_RATE = 1e-4
 DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-BATCH_SIZE = 32
-NUM_EPOCHS = 50
-NUM_WORKERS = 100
+BATCH_SIZE = 16
+NUM_EPOCHS = 3
+NUM_WORKERS = 4
 PIN_MEMORY = True
 IMAGE_HEIGHT = 160
 IMAGE_WIDTH = 240
@@ -57,24 +57,21 @@ def main():
             A.Rotate(limit=35, p=1.0),
             A.HorizontalFlip(p=0.5),
             A.VerticalFlip(p=0.1),
-            A.HueSaturationValue(
-                hue_shift_limit=20, sat_shift_limit=30, val_shift_limit=20, p=0.5),
             A.Normalize(
-                mean=[0.485, 0.456, 0.406],
-                std=[0.229, 0.224, 0.225],
+                mean=[0.0, 0.0, 0.0],
+                std=[1.0, 1.0, 1.0],
                 max_pixel_value=255.0,
+            ),
 
-            )
         ]
     )
 
     val_transforms = A.Compose([
         A.Resize(height=IMAGE_HEIGHT, width=IMAGE_WIDTH),
         A.Normalize(
-            mean=[0.485, 0.456, 0.406],
-            std=[0.229, 0.224, 0.225],
+            mean=[0.0, 0.0, 0.0],
+            std=[1.0, 1.0, 1.0],
             max_pixel_value=255.0,
-
         ),
     ])
 
@@ -91,11 +88,10 @@ def main():
     print(f"Number of training samples: {len(trainset)}")
     print(f"Number of validating samples: {len(valset)}")
 
-    # trainset.visualize_batch()
-
     # if out_channels > 1 then use cross entropy loss for multiple classes
-    model = UNET(in_channels=3, out_channels=1)
-    criterion = nn.BCEWithLogitsLoss()  # not doing Sigmoid at output layer
+    model = UNET(in_channels=3, out_channels=1).to(DEVICE)
+    # not doing Sigmoid at output layer
+    criterion = nn.BCEWithLogitsLoss().to(DEVICE)
     optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
     scaler = torch.cuda.amp.GradScaler()  # prevent underflow
 
@@ -112,12 +108,12 @@ def main():
                 'optimizer': optimizer.state_dict()
             }
 
-            save_checkpoint(checkpoint)
+            save_checkpoint(checkpoint, filename=CHECKPOINT)
 
             check_accuracy(valloader, model, device=DEVICE)
 
             save_predictions_as_imgs(
-                valloader, model, folder='saved_images/', device=DEVICE)
+                valloader, model, folder='saved_images', device=DEVICE)
 
 
 if __name__ == '__main__':

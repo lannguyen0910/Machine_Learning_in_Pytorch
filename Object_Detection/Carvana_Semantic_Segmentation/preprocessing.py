@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 
-df = pd.read_csv('train_masks.csv')
+df = pd.read_csv('csv/train_masks.csv')
 print(len(df))
 
 train_df, val_df = train_test_split(df, train_size=0.8, random_state=40)

@@ -5,3 +5,4 @@ train_masks
 train
 train_masks.zip
 Carvana_Semantic_Segmentation.ipynb
+checkpoint

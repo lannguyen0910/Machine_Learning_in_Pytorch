@@ -1,5 +1,6 @@
 import torch
 import torchvision
+import os
 
 
 def save_checkpoint(state, filename="my_checkpoint.pth"):
@@ -54,6 +55,6 @@ def save_predictions_as_imgs(loader, model, folder="saved_images/", device="cuda
         torchvision.utils.save_image(
             preds, f"{folder}/pred_{idx}.png"
         )
-        torchvision.utils.save_image(y.unsqueeze(1), f"{folder}{idx}.png")
+        torchvision.utils.save_image(y, f"{folder}{idx}.png")
 
     model.train()
