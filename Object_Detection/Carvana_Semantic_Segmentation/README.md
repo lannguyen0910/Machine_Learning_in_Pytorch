@@ -16,10 +16,14 @@ python train.py
 - After training you can see checkpoint file which saved model and optimizer state. 
 - To load checkpoint you can change LOAD_MODEL to True
 
-## Result Example
+## Result
+After 3 epochs: 
+- Pixels accuracy is 99.19
+- Dice score: 0.983
 - Batch 0 of real masks 
 - Batch 0 of predict masks
 - 16 images for each batch
-- To the left is real masks and to the right is predict masks
+- The first image is real masks and to second is predict masks
 
-![Result1](real_masks/saved_images0.png) | ![Result2](predict_masks/pred_0.png)
+![Result1](real_masks/saved_images0.png) 
+![Result2](predict_masks/pred_0.png)
