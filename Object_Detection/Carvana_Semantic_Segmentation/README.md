@@ -9,6 +9,7 @@ Download the data from [kaggle](https://www.kaggle.com/c/carvana-image-masking-c
 ## Data
 - [drive](https://drive.google.com/drive/folders/19_8oIEERDGQjqKbAkla3ZvM4qdJUcuM4?usp=sharing)
 - Visualize data
+
 ![visual1](data_visualize/image1.PNG) 
 ![visual2](data_visualize/image2.PNG)
 
